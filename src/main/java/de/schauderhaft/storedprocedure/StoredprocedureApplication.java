@@ -4,13 +4,10 @@ import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.SQLType;
-import java.sql.Types;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -34,17 +31,18 @@ public class StoredprocedureApplication {
 	public void run() {
 		selftest();
 		createStoredProcedure();
-		callStoredProcedure();
+		callStoredProcedureWithOneCursorOut();
+		// doesn't seem to work
+		// callStoredProcedureWithTwoCursorOut();
+//		callStoredFunctionWithOneCursorReturned();
 	}
 
-	private void callStoredProcedure() {
+	private void callStoredProcedureWithOneCursorOut() {
 
 		// cursor gets returned as ArrayList
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withProcedureName("callOne");
 
-		SqlOutParameter parameter = new SqlOutParameter("p_recordset", OracleTypes.CURSOR);
-
-		jdbcCall.declareParameters(parameter);
+		jdbcCall.declareParameters(new SqlOutParameter("p_recordset", OracleTypes.CURSOR));
 
 
 		Map<String, Object> result = jdbcCall.execute();
@@ -54,10 +52,25 @@ public class StoredprocedureApplication {
 		System.out.println(recordset.getClass());
 		System.out.println(recordset);
 	}
+	private void callStoredProcedureWithTwoCursorOut() {
 
+		// cursor gets returned as ArrayList
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withProcedureName("callTwo");
+
+		jdbcCall.declareParameters(new SqlOutParameter("rs1", OracleTypes.CURSOR));
+		jdbcCall.declareParameters(new SqlOutParameter("rs2", OracleTypes.CURSOR));
+
+
+		Map<String, Object> result = jdbcCall.execute();
+
+		Object recordset = result.get("p_recordset");
+
+		System.out.println(recordset.getClass());
+		System.out.println(recordset);
+	}
 	private void createStoredProcedure() {
 
-		String storedProcedureScript = readFile("storedProcedureScript.sql", Charset.defaultCharset());
+		String storedProcedureScript = readFile("callOne.sql", Charset.defaultCharset());
 
 		template.execute(storedProcedureScript);
 	}
