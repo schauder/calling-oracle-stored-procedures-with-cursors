@@ -40,7 +40,7 @@ public class StoredprocedureApplication {
 	private void callStoredProcedure() {
 
 		// cursor gets returned as ArrayList
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withProcedureName("get_from_dual");
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withProcedureName("callOne");
 
 		SqlOutParameter parameter = new SqlOutParameter("p_recordset", OracleTypes.CURSOR);
 
