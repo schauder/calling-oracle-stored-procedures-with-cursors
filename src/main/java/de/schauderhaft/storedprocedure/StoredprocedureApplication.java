@@ -1,8 +1,6 @@
 package de.schauderhaft.storedprocedure;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,8 +8,6 @@ import java.nio.file.Paths;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.jpa.repository.query.Procedure;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootApplication
@@ -21,12 +17,12 @@ public class StoredprocedureApplication {
 	private final JdbcTemplate template;
 
 	private final CallingViaJDBC callingViaJDBC;
-	private final CallingViaJPA callingViaJPA;
+	private final CallingViaDataJPA callingViaDataJPA;
 
-	public StoredprocedureApplication(JdbcTemplate template, CallingViaJDBC callingViaJDBC, CallingViaJPA callingViaJPA) {
+	public StoredprocedureApplication(JdbcTemplate template, CallingViaJDBC callingViaJDBC, CallingViaDataJPA callingViaDataJPA) {
 		this.template = template;
 		this.callingViaJDBC = callingViaJDBC;
-		this.callingViaJPA = callingViaJPA;
+		this.callingViaDataJPA = callingViaDataJPA;
 	}
 
 	public static void main(String[] args) {
@@ -39,8 +35,8 @@ public class StoredprocedureApplication {
 
 		createStoredProcedure();
 
-		//callingViaJDBC.execute();
-		callingViaJPA.execute();
+		callingViaJDBC.execute();
+		callingViaDataJPA.execute();
 	}
 
 	private void createStoredProcedure() {

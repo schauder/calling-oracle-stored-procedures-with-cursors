@@ -26,9 +26,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface DummyRepository extends CrudRepository<Dummy, Long> {
 
-	@Procedure(name = "namedCallOne")
-	List<String> callOne();
+	@Procedure
+	List<Dummy> callOne();
 
-	@Procedure(name = "namedCallString")
+	@Procedure
 	String callString( String pIn);
 }

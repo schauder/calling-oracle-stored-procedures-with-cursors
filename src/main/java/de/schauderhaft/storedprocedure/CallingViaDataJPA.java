@@ -21,11 +21,11 @@ import org.springframework.stereotype.Component;
  * @author Jens Schauder
  */
 @Component
-class CallingViaJPA {
+class CallingViaDataJPA {
 
 	private final DummyRepository repository;
 
-	CallingViaJPA(DummyRepository repository) {
+	CallingViaDataJPA(DummyRepository repository) {
 		this.repository = repository;
 	}
 
@@ -33,7 +33,6 @@ class CallingViaJPA {
 	void execute() {
 		System.out.println(repository.callString("text"));
 
-
-		System.out.println(repository.callOne());
+//		System.out.println(repository.callOne());
 	}
 }
