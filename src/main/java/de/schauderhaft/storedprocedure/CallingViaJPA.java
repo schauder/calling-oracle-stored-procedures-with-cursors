@@ -30,6 +30,6 @@ class CallingViaJPA {
 	}
 
 	void execute() {
-		System.out.println(repository.callString());
+		System.out.println(repository.callString("text"));
 	}
 }

@@ -40,10 +40,10 @@ import javax.persistence.StoredProcedureParameter;
 				procedureName = "callString",
 //				resultClasses = String.class,
 				parameters = {
-						@StoredProcedureParameter(mode = ParameterMode.OUT, type = String.class)
+						@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class),
+						@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class)
 				}
 		)})
-
 @Entity
 public class Dummy {
 

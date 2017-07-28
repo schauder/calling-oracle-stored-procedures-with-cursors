@@ -1,5 +1,5 @@
 CREATE OR REPLACE
-PROCEDURE callString(text IN OUT VARCHAR2) AS
+PROCEDURE callString(pIn IN VARCHAR2, pOut OUT VARCHAR2) AS
   BEGIN
-    text := text || 'hello';
+    pOut := pIn || ' h a l l o';
   END callString;
