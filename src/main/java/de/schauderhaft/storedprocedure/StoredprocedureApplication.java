@@ -1,33 +1,32 @@
 package de.schauderhaft.storedprocedure;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.jpa.repository.query.Procedure;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.object.StoredProcedure;
-
-import oracle.jdbc.OracleTypes;
 
 @SpringBootApplication
+@EnableJpaRepositories
 public class StoredprocedureApplication {
 
 	private final JdbcTemplate template;
 
 	private final CallingViaJDBC callingViaJDBC;
+	private final CallingViaJPA callingViaJPA;
 
-	public StoredprocedureApplication(JdbcTemplate template) {
+	public StoredprocedureApplication(JdbcTemplate template, CallingViaJDBC callingViaJDBC, CallingViaJPA callingViaJPA) {
 		this.template = template;
-		this.callingViaJDBC = new CallingViaJDBC(template);
+		this.callingViaJDBC = callingViaJDBC;
+		this.callingViaJPA = callingViaJPA;
 	}
 
 	public static void main(String[] args) {
@@ -40,11 +39,13 @@ public class StoredprocedureApplication {
 
 		createStoredProcedure();
 
-		callingViaJDBC.execute();
+		//callingViaJDBC.execute();
+		callingViaJPA.execute();
 	}
 
 	private void createStoredProcedure() {
 
+		template.execute(readFile("callString.sql", Charset.defaultCharset()));
 		template.execute(readFile("callOne.sql", Charset.defaultCharset()));
 		template.execute(readFile("callTwo.sql", Charset.defaultCharset()));
 		template.execute(readFile("returnOne.sql", Charset.defaultCharset()));
@@ -66,6 +67,4 @@ public class StoredprocedureApplication {
 			throw new RuntimeException(e);
 		}
 	}
-
-
 }

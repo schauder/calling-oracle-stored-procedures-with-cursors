@@ -24,12 +24,14 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.object.StoredProcedure;
+import org.springframework.stereotype.Component;
 
 import oracle.jdbc.OracleTypes;
 
 /**
  * @author Jens Schauder
  */
+@Component
 class CallingViaJDBC {
 
 	private final JdbcTemplate template;
