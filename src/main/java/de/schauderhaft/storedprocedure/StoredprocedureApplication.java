@@ -4,12 +4,17 @@ import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlReturnResultSet;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 import oracle.jdbc.OracleTypes;
@@ -33,8 +38,8 @@ public class StoredprocedureApplication {
 		createStoredProcedure();
 		callStoredProcedureWithOneCursorOut();
 		// doesn't seem to work
-		// callStoredProcedureWithTwoCursorOut();
-//		callStoredFunctionWithOneCursorReturned();
+		 callStoredProcedureWithTwoCursorOut();
+		//callStoredFunctionWithOneCursorReturned();
 	}
 
 	private void callStoredProcedureWithOneCursorOut() {
@@ -44,7 +49,6 @@ public class StoredprocedureApplication {
 
 		jdbcCall.declareParameters(new SqlOutParameter("p_recordset", OracleTypes.CURSOR));
 
-
 		Map<String, Object> result = jdbcCall.execute();
 
 		Object recordset = result.get("p_recordset");
@@ -52,27 +56,47 @@ public class StoredprocedureApplication {
 		System.out.println(recordset.getClass());
 		System.out.println(recordset);
 	}
+
+	private void callStoredFunctionWithOneCursorReturned() {
+
+		// cursor gets returned as ArrayList
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withFunctionName("returnOne");
+		jdbcCall.returningResultSet("resultValue", (resultSet, i) -> {
+			System.out.println(resultSet);
+			return i;
+		});
+
+		Object result = jdbcCall.executeFunction(Object.class);
+
+		System.out.println(result);
+	}
+
 	private void callStoredProcedureWithTwoCursorOut() {
 
 		// cursor gets returned as ArrayList
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withProcedureName("callTwo");
 
-		jdbcCall.declareParameters(new SqlOutParameter("rs1", OracleTypes.CURSOR));
-		jdbcCall.declareParameters(new SqlOutParameter("rs2", OracleTypes.CURSOR));
-
+		jdbcCall.declareParameters( //
+				new SqlOutParameter("rs1", OracleTypes.CURSOR), //
+				new SqlOutParameter("rs2", OracleTypes.CURSOR) //
+		);
 
 		Map<String, Object> result = jdbcCall.execute();
 
-		Object recordset = result.get("p_recordset");
+		Object rs1 = result.get("rs1");
+		Object rs2 = result.get("rs2");
 
-		System.out.println(recordset.getClass());
-		System.out.println(recordset);
+		System.out.println(rs1.getClass());
+		System.out.println(rs1);
+		System.out.println(rs2.getClass());
+		System.out.println(rs2);
 	}
+
 	private void createStoredProcedure() {
 
-		String storedProcedureScript = readFile("callOne.sql", Charset.defaultCharset());
-
-		template.execute(storedProcedureScript);
+		template.execute(readFile("callOne.sql", Charset.defaultCharset()));
+		template.execute(readFile("callTwo.sql", Charset.defaultCharset()));
+		template.execute(readFile("returnOne.sql", Charset.defaultCharset()));
 	}
 
 	private void selftest() {

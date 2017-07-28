@@ -9,14 +9,13 @@ PROCEDURE callTwo(rs1 OUT SYS_REFCURSOR, rs2 OUT SYS_REFCURSOR) AS
     SELECT
       1,
       2,
-      "Hello"
+      'Hello' as hallo
     FROM dual
     UNION ALL
     SELECT
       3,
       4,
-      "Hola"
+      'Hola'
     FROM dual;
-
 
   END callTwo;
