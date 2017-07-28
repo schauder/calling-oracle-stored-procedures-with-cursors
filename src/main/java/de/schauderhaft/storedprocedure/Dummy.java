@@ -30,15 +30,14 @@ import javax.persistence.StoredProcedureParameter;
 		@NamedStoredProcedureQuery(
 				name = "namedAsCallOne",
 				procedureName = "callOne",
-//				resultClasses = String.class,
+				resultClasses = String.class,
 				parameters = {
-						@StoredProcedureParameter(mode = ParameterMode.REF_CURSOR, type = void.class)
+						@StoredProcedureParameter(mode = ParameterMode.OUT, type = void.class)
 				}
 		),
 		@NamedStoredProcedureQuery(
 				name = "namedAsCallString",
 				procedureName = "callString",
-//				resultClasses = String.class,
 				parameters = {
 						@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class),
 						@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class)

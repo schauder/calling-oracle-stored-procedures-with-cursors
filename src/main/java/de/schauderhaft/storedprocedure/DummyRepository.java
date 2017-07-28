@@ -15,6 +15,8 @@
  */
 package de.schauderhaft.storedprocedure;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -25,7 +27,7 @@ import org.springframework.data.repository.query.Param;
 public interface DummyRepository extends CrudRepository<Dummy, Long> {
 
 	@Procedure(name = "namedCallOne")
-	Object callOne();
+	List<String> callOne();
 
 	@Procedure(name = "namedCallString")
 	String callString( String pIn);

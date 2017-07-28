@@ -29,7 +29,11 @@ class CallingViaJPA {
 		this.repository = repository;
 	}
 
+
 	void execute() {
 		System.out.println(repository.callString("text"));
+
+
+		System.out.println(repository.callOne());
 	}
 }
