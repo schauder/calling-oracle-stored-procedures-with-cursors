@@ -11,11 +11,10 @@ import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.SqlInOutParameter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlReturnResultSet;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import org.springframework.jdbc.object.StoredProcedure;
 
 import oracle.jdbc.OracleTypes;
 
@@ -36,10 +35,9 @@ public class StoredprocedureApplication {
 	public void run() {
 		selftest();
 		createStoredProcedure();
-		callStoredProcedureWithOneCursorOut();
-		// doesn't seem to work
-		 callStoredProcedureWithTwoCursorOut();
-		//callStoredFunctionWithOneCursorReturned();
+		//callStoredProcedureWithOneCursorOut();
+		//callStoredProcedureWithTwoCursorOut();
+		callStoredFunctionWithOneCursorReturned();
 	}
 
 	private void callStoredProcedureWithOneCursorOut() {
@@ -60,13 +58,9 @@ public class StoredprocedureApplication {
 	private void callStoredFunctionWithOneCursorReturned() {
 
 		// cursor gets returned as ArrayList
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(template).withFunctionName("returnOne");
-		jdbcCall.returningResultSet("resultValue", (resultSet, i) -> {
-			System.out.println(resultSet);
-			return i;
-		});
+		StoredProcedure returnOne = new ReturnOne(template);
 
-		Object result = jdbcCall.executeFunction(Object.class);
+		Map<String, Object> result = returnOne.execute();
 
 		System.out.println(result);
 	}
@@ -100,11 +94,12 @@ public class StoredprocedureApplication {
 	}
 
 	private void selftest() {
+
 		System.out.println("running self test");
 		String x = template.queryForObject("select * from dual", String.class);
 	}
 
-	static String readFile(String path, Charset encoding) {
+	private static String readFile(String path, Charset encoding) {
 
 		byte[] encoded;
 		try {
@@ -112,6 +107,24 @@ public class StoredprocedureApplication {
 			return new String(encoded, encoding);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+
+	private static class ReturnOne extends StoredProcedure {
+
+		ReturnOne(JdbcTemplate template) {
+			super(template, "returnOne");
+			setFunction(true);
+			declareParameter(new SqlOutParameter("out", OracleTypes.CURSOR, new RowMapper<Object>() {
+				@Override
+				public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+					System.out.println("converting row " + rowNum);
+					return "blah";
+				}
+			}));
+			compile();
+
 		}
 	}
 }
