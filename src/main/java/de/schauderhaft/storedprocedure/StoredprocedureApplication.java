@@ -35,8 +35,8 @@ public class StoredprocedureApplication {
 	public void run() {
 		selftest();
 		createStoredProcedure();
-		//callStoredProcedureWithOneCursorOut();
-		//callStoredProcedureWithTwoCursorOut();
+		callStoredProcedureWithOneCursorOut();
+		callStoredProcedureWithTwoCursorOut();
 		callStoredFunctionWithOneCursorReturned();
 	}
 
