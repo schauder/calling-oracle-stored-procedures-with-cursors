@@ -25,3 +25,6 @@ nbdist/
 
 ### do not commit oracle libs
 lib/
+
+### do not commit username and password
+application.properties
