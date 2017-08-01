@@ -17,11 +17,14 @@ public class StoredprocedureApplication {
 	private final JdbcTemplate template;
 
 	private final CallingViaJDBC callingViaJDBC;
+	private final CallingViaJPA callingViaJPA;
 	private final CallingViaDataJPA callingViaDataJPA;
 
-	public StoredprocedureApplication(JdbcTemplate template, CallingViaJDBC callingViaJDBC, CallingViaDataJPA callingViaDataJPA) {
+	public StoredprocedureApplication(JdbcTemplate template, CallingViaJDBC callingViaJDBC, CallingViaJPA callingViaJPA, CallingViaDataJPA callingViaDataJPA) {
+
 		this.template = template;
 		this.callingViaJDBC = callingViaJDBC;
+		this.callingViaJPA = callingViaJPA;
 		this.callingViaDataJPA = callingViaDataJPA;
 	}
 
@@ -35,8 +38,9 @@ public class StoredprocedureApplication {
 
 		createStoredProcedure();
 
-		callingViaJDBC.execute();
-		callingViaDataJPA.execute();
+		//callingViaJDBC.execute();
+		callingViaJPA.execute();
+		//callingViaDataJPA.execute();
 	}
 
 	private void createStoredProcedure() {
