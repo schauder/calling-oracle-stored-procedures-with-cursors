@@ -2,3 +2,8 @@ spring.datasource.url=jdbc:oracle:thin:@localhost:1521:orcl
 spring.datasource.username=<database user here>
 spring.datasource.password=<your password here>
 spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true

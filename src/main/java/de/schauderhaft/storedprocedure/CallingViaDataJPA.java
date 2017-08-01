@@ -33,6 +33,6 @@ class CallingViaDataJPA {
 	void execute() {
 		System.out.println(repository.callString("text"));
 
-//		System.out.println(repository.callOne());
+		System.out.println(repository.callOne());
 	}
 }
