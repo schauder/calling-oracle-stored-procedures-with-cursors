@@ -38,8 +38,8 @@ import javax.persistence.StoredProcedureParameter;
 				name = "namedAsCallString",
 				procedureName = "callString",
 				parameters = {
-						@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class),
-						@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class)
+						@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class),
+						@StoredProcedureParameter(mode = ParameterMode.OUT, type = String.class)
 				}
 		)})
 @Entity
