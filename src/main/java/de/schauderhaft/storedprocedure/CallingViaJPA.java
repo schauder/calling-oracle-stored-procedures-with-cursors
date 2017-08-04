@@ -44,12 +44,16 @@ class CallingViaJPA {
 
 		callString.execute();
 
-		// incorrectly produces false
-		System.out.println("has more results: " + callString.hasMoreResults());
-		// works
-//		System.out.println(callString.getResultList());
-		// doesn't work
-		System.out.println(callString.getOutputParameterValue(1));
+		if(callString.hasMoreResults()){
+			//calling orignal method incase of eclispse link (Any other jpa)
+			System.out.println(callString.getOutputParameterValue(1));
+		}else{
+			//in case of hibernate use this call
+			System.out.println(callString.getResultList());
+		}
+
+
+		
 	}
 
 	private void callString() {
