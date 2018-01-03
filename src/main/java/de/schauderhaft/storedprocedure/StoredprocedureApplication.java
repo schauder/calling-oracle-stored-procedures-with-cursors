@@ -38,9 +38,9 @@ public class StoredprocedureApplication {
 
 		createStoredProcedure();
 
-		//callingViaJDBC.execute();
+		callingViaJDBC.execute();
 		callingViaJPA.execute();
-		//callingViaDataJPA.execute();
+		callingViaDataJPA.execute();
 	}
 
 	private void createStoredProcedure() {

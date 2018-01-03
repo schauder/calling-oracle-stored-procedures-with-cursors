@@ -34,7 +34,7 @@ class CallingViaJPA {
 	}
 
 	void execute() {
-		//callString();
+		callString();
 		callOne();
 	}
 
@@ -47,9 +47,9 @@ class CallingViaJPA {
 		// incorrectly produces false
 		System.out.println("has more results: " + callString.hasMoreResults());
 		// works
-//		System.out.println(callString.getResultList());
+		System.out.println(callString.getResultList());
 		// doesn't work
-		System.out.println(callString.getOutputParameterValue(1));
+		//System.out.println(callString.getOutputParameterValue(1));
 	}
 
 	private void callString() {
